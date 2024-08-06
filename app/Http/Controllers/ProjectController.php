@@ -16,13 +16,18 @@ class ProjectController extends Controller
     public function index()
     {
         $query = Project::query();
+
+        $sortField = request('sort_field','created_at');
+        $sortDirection = request('sort_direction','desc');
+
         if (!empty(request('name'))) {
             $query->where('name', 'like', '%' . request('name') . '%');
         }
-        if (!empty(request('search'))) {
-            $query->where('status',  request('search'));
+        if (!empty(request('status'))) {
+            $query->where('status',  request('status'));
         }
-        $projects = $query->paginate(10)->onEachSide(1);
+        $projects = $query->orderBy($sortField, $sortDirection)
+                    ->paginate(10)->onEachSide(1);
         return inertia('Project/Index', [
             'projects' => ProjectResource::collection($projects),
             'queryParams' => request()->query() ?  : null ,
