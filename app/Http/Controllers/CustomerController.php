@@ -26,9 +26,7 @@ class CustomerController extends Controller{
     }
 
     /**
-     * Display a listing of the customers.
-     *
-     * @return JsonResponse
+     * Display a listing of the customers. 
      */
     public function index() 
     {
@@ -67,16 +65,17 @@ class CustomerController extends Controller{
     /**
      * Store a newly created customer in storage.
      *
-     * @param CustomerRequest $request
-     * @return JsonResponse
+     * @param CustomerRequest $request 
      */public function store(CustomerRequest $request)
     {
         $data = $request->validated();
+        $image = $data['image'] ?? null;
         $data['created_by'] = Auth::id();
         $data['updated_by'] = Auth::id();
-
-        // Handle any additional file uploads or processing here, if needed// Example: if ($request->hasFile('profile_image')) { ... }$customer = $this->customerService->createCustomer($data);
-
+        if ($image) {
+            $data['image_path'] = $image->store('project/' . Str::random(), 'public');
+        }
+        Customer::create($data);
         return to_route('customer.index')
             ->with('success', 'Customer was created');
     }
@@ -110,8 +109,7 @@ class CustomerController extends Controller{
      * Update the specified customer in storage.
      *
      * @param CustomerRequest $request
-     * @param Customer $customer
-     * @return JsonResponse
+     * @param Customer $customer 
      */public function update(CustomerRequest $request, Customer $customer)
     {
         $data = $request->validated();
@@ -126,8 +124,7 @@ class CustomerController extends Controller{
     /**
      * Remove the specified customer from storage.
      *
-     * @param Customer $customer
-     * @return JsonResponse
+     * @param Customer $customer 
      */
     public function destroy(Customer $customer)
     {

@@ -97,7 +97,16 @@ export default function Index({ auth, customers, queryParams = null, success }) 
                       >
                         Name
                       </TableHeading>
+                      <th className="px-3 py-3">Mobile Number</th>
 
+                      <TableHeading
+                        name="area"
+                        sort_field={queryParams.sort_field}
+                        sort_direction={queryParams.sort_direction}
+                        sortChanged={sortChanged}
+                      >
+                        Area
+                      </TableHeading>
                       <TableHeading
                         name="status"
                         sort_field={queryParams.sort_field}
@@ -115,21 +124,14 @@ export default function Index({ auth, customers, queryParams = null, success }) 
                       >
                         Create Date
                       </TableHeading>
-
-                      <TableHeading
-                        name="due_date"
-                        sort_field={queryParams.sort_field}
-                        sort_direction={queryParams.sort_direction}
-                        sortChanged={sortChanged}
-                      >
-                        Due Date
-                      </TableHeading>
+                   
                       <th className="px-3 py-3">Created By</th>
                       <th className="px-3 py-3 text-right">Actions</th>
                     </tr>
                   </thead>
-                  <thead className="text-xs text-gray-700 uppercase border-b-2 border-gray-500 bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
+                  {/* <thead className="text-xs text-gray-700 uppercase border-b-2 border-gray-500 bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
                     <tr className="text-nowrap">
+                      <th className="px-3 py-3"></th>
                       <th className="px-3 py-3"></th>
                       <th className="px-3 py-3"></th>
                       <th className="px-3 py-3">
@@ -152,9 +154,8 @@ export default function Index({ auth, customers, queryParams = null, success }) 
                           }
                         >
                           <option value="">Select Status</option>
-                          <option value="pending">Pending</option>
-                          <option value="in_progress">In Progress</option>
-                          <option value="completed">Completed</option>
+                          <option value="active">Active</option>
+                          <option value="in_active">In Active</option>                          
                         </SelectInput>
                       </th>
                       <th className="px-3 py-3"></th>
@@ -162,7 +163,7 @@ export default function Index({ auth, customers, queryParams = null, success }) 
                       <th className="px-3 py-3"></th>
                       <th className="px-3 py-3"></th>
                     </tr>
-                  </thead>
+                  </thead> */}
                   <tbody>
                     {customers.data.map((customer) => (
                       <tr
@@ -178,6 +179,12 @@ export default function Index({ auth, customers, queryParams = null, success }) 
                             {customer.name}
                           </Link>
                         </th>
+                        <td className="px-3 py-2">                       
+                            {customer.mobile_number}
+                        </td>
+                        <td className="px-3 py-2">                       
+                            {customer.area}
+                        </td>
                         <td className="px-3 py-2">
                           <span
                             className={
@@ -191,9 +198,7 @@ export default function Index({ auth, customers, queryParams = null, success }) 
                         <td className="px-3 py-2 text-nowrap">
                           {customer.created_at}
                         </td>
-                        <td className="px-3 py-2 text-nowrap">
-                          {customer.due_date}
-                        </td>
+                      
                         <td className="px-3 py-2">{customer.createdBy.name}</td>
                         <td className="px-3 py-2 text-nowrap">
                           <Link

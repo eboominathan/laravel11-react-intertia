@@ -1,12 +1,11 @@
 export const CUSTOMER_STATUS_CLASS_MAP = {
-  pending: "bg-amber-500",
-  in_progress: "bg-blue-500 ",
-  completed: "bg-green-500",
+  active: "bg-green-500",
+  in_active: "bg-red-500 "  
 };
 export const CUSTOMER_STATUS_TEXT_MAP = {
-  pending: "Pending",
-  in_progress: "In Progress",
-  completed: "Completed",
+  active: "Active",
+  in_active: "In Active"
+  
 };
 export const PROJECT_STATUS_CLASS_MAP = {
     pending: "bg-amber-500",

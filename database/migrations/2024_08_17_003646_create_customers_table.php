@@ -22,9 +22,9 @@ return new class extends Migration
             $table->string('state')->nullable();
             $table->string('status')->default('active');
             $table->string('image_path')->nullable();
-            $table->foreignId('created_by')->constrained('users');
-            $table->foreignId('updated_by')->constrained('users');
-            $table->foreignId('deleted_by')->constrained('users');
+            $table->foreignId('created_by')->constrained('users')->nullable();
+            $table->foreignId('updated_by')->constrained('users')->nullable();
+            $table->foreignId('deleted_by')->constrained('users')->nullable();
             $table->timestamps();
             $table->softDeletes();
         });
