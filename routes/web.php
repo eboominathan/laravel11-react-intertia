@@ -10,19 +10,19 @@ use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
 
-Route::redirect('/','/dashboard' );
+Route::redirect('/', '/dashboard');
 
 Route::middleware(['auth'])->group(function () {
 
     Route::get('/dashboard', [DashboardController::class, 'index'])
         ->name('dashboard');
 
-    Route::resource('project',ProjectController::class);
+    Route::resource('project', ProjectController::class);
     Route::get('/task/my-tasks', [TaskController::class, 'myTasks'])
-    ->name('task.myTasks');
-    Route::resource('task',TaskController::class);
-    Route::resource('user',UserController::class);
-    Route::resource('customer',CustomerController::class);
+        ->name('task.myTasks');
+    Route::resource('task', TaskController::class);
+    Route::resource('user', UserController::class);
+    Route::resource('customer', CustomerController::class);
 });
 Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
@@ -30,4 +30,4 @@ Route::middleware('auth')->group(function () {
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 });
 
-require __DIR__.'/auth.php';
+require __DIR__ . '/auth.php';

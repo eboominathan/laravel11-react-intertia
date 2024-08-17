@@ -113,9 +113,16 @@ class CustomerController extends Controller{
      */public function update(CustomerRequest $request, Customer $customer)
     {
         $data = $request->validated();
+        $image = $data['image'] ?? null;
         $data['updated_by'] = Auth::id();
+        if ($image) {
+            if ($customer->image_path) {
+                Storage::disk('public')->deleteDirectory(dirname($customer->image_path));
+            }
+            $data['image_path'] = $image->store('project/' . Str::random(), 'public');
+        }
+        $customer->update($data);
 
-        // Handle any additional file updates or processing here, if needed// Example: if ($request->hasFile('profile_image')) { ... }$this->customerService->updateCustomer($customer->id, $data);
 
         return to_route('customer.index')
             ->with('success', "Customer \"$customer->name\" was updated");
