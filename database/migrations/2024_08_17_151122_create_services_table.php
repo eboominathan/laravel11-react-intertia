@@ -22,15 +22,12 @@ return new class extends Migration
             $table->string('follower_name');
             $table->string('location')->nullable();
             $table->text('comments')->nullable();
-
-            // Assuming the correct table names are plural
-            $table->foreignId('customer_id')->nullable()->constrained('customers');
-            $table->foreignId('category_id')->nullable()->constrained('categories');
-            $table->foreignId('subcategory_id')->nullable()->constrained('subcategories');
-            $table->foreignId('created_by')->nullable()->constrained('users');
-            $table->foreignId('updated_by')->nullable()->constrained('users');
-            $table->foreignId('deleted_by')->nullable()->constrained('users');
-
+            $table->foreignId('customer_id')->constrained('customers')->nullable();
+            $table->foreignId('category_id')->constrained('categories')->nullable();
+            $table->foreignId('subcategory_id')->constrained('sub_categories')->nullable();
+            $table->foreignId('created_by')->constrained('users')->nullable();
+            $table->foreignId('updated_by')->constrained('users')->nullable();
+            $table->foreignId('deleted_by')->constrained('users')->nullable();
             $table->timestamps();
             $table->softDeletes();
         });

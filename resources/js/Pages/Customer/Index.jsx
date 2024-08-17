@@ -82,18 +82,16 @@ export default function Index({
           <div className="overflow-hidden bg-white shadow-sm dark:bg-gray-800 sm:rounded-lg">
             <div className="p-6 text-gray-900 dark:text-gray-100">
               <div className="overflow-auto">
-                
                 <table className="w-full text-sm text-left text-gray-500 rtl:text-right dark:text-gray-400">
-                <thead className="text-xs text-gray-700 uppercase border-b-2 border-gray-500 bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
+                  <thead className="text-xs text-gray-700 uppercase border-b-2 border-gray-500 bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
                     <tr className="text-nowrap">
                       <th className="px-3 py-3"></th>
-                    
-                      
+
                       <th className="px-3 py-3">
                         <TextInput
                           className="w-full"
                           defaultValue={queryParams.name}
-                          placeholder="Customer Name"
+                          placeholder="Name"
                           onBlur={(e) =>
                             searchFieldChanged("name", e.target.value)
                           }
@@ -133,9 +131,9 @@ export default function Index({
                           onKeyPress={(e) => onKeyPress("area", e)}
                         />
                       </th>
-                      
+
                       <th className="px-3 py-3">
-                      <TextInput
+                        <TextInput
                           className="w-full"
                           defaultValue={queryParams.city}
                           placeholder="City"
@@ -158,7 +156,7 @@ export default function Index({
                       >
                         ID
                       </TableHeading>
-                  
+
                       <TableHeading
                         name="name"
                         sort_field={queryParams.sort_field}
@@ -185,22 +183,20 @@ export default function Index({
                       >
                         Area
                       </TableHeading>
-                    
+
                       <TableHeading
                         name="city"
                         sort_field={queryParams.sort_field}
                         sort_direction={queryParams.sort_direction}
                         sortChanged={sortChanged}
                       >
-                      City
+                        City
                       </TableHeading>
-
-                 
 
                       <th className="px-3 py-3 text-right">Actions</th>
                     </tr>
                   </thead>
-                
+
                   <tbody>
                     {customers.data.map((customer) => (
                       <tr
@@ -208,46 +204,44 @@ export default function Index({
                         key={customer.id}
                       >
                         <td className="px-3 py-2">{customer.id}</td>
-                        
+
                         <th className="px-3 py-2 text-gray-100 text-nowrap hover:underline">
                           <div className="flex">
-                          <div className="image">
-                          <a href={`#lightbox` + customer.id}>
-                            <img
-                              src={customer.image_path}                           
-                              className="w-10 h-10 rounded-full" 
-                            />
-                          </a>
-                          <div
-                            id={`lightbox` + customer.id}
-                            className="fixed inset-0 hidden p-10 overflow-auto target:block bg-black/75"
-                          >
-                            <a
-                              href="#"
-                              className="absolute top-0 right-0 px-3 py-1 text-black bg-white"
-                            >
-                              X
-                            </a>
-                            <img
-                              src={customer.image_path}
-                              alt={customer.name}
-                            />
+                            <div className="image">
+                              <a href={`#lightbox` + customer.id}>
+                                <img
+                                  src={customer.image_path}
+                                  className="w-10 h-10 rounded-full"
+                                />
+                              </a>
+                              <div
+                                id={`lightbox` + customer.id}
+                                className="fixed inset-0 hidden p-10 overflow-auto target:block bg-black/75"
+                              >
+                                <a
+                                  href="#"
+                                  className="absolute top-0 right-0 px-3 py-1 text-black bg-white"
+                                >
+                                  X
+                                </a>
+                                <img
+                                  src={customer.image_path}
+                                  alt={customer.name}
+                                />
+                              </div>
+                            </div>
+                            <div className="gap-2 p-3 name">
+                              <Link href={route("customer.show", customer.id)}>
+                                {customer.name}
+                              </Link>
+                            </div>
                           </div>
-                          </div>
-                          <div className="gap-2 p-3 name">
-                          <Link href={route("customer.show", customer.id)} >
-                            {customer.name}
-                          </Link>
-                          </div>
-                          </div>
-                         
-                         
                         </th>
                         <td className="px-3 py-2">{customer.mobile_number}</td>
                         <td className="px-3 py-2">{customer.street}</td>
                         <td className="px-3 py-2">{customer.area}</td>
-                        
-                        <td className="px-3 py-2">{customer.city}</td>                   
+
+                        <td className="px-3 py-2">{customer.city}</td>
 
                         <td className="px-3 py-2 text-nowrap">
                           <Link
