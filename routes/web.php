@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\CustomerController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\ProjectController;
@@ -11,7 +12,8 @@ use Inertia\Inertia;
 
 Route::redirect('/','/dashboard' );
 
-Route::middleware(['auth', 'verified'])->group(function () {
+Route::middleware(['auth'])->group(function () {
+
     Route::get('/dashboard', [DashboardController::class, 'index'])
         ->name('dashboard');
 
@@ -20,6 +22,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
     ->name('task.myTasks');
     Route::resource('task',TaskController::class);
     Route::resource('user',UserController::class);
+    Route::resource('customer',CustomerController::class);
 });
 Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
