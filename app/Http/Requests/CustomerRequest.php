@@ -23,7 +23,8 @@ class CustomerRequest extends FormRequest
      */ public function rules(): array
     {
         switch ($this->method()) {
-            case 'POST':  // Createreturn$this->storeRules();
+            case 'POST':  // Createreturn
+                return $this->storeRules();
 
             case 'PUT':   // Updatecase'PATCH':
                 return $this->updateRules();
@@ -51,6 +52,7 @@ class CustomerRequest extends FormRequest
             'city' => 'nullable|string|max:255',
             'state' => 'nullable|string|max:255',
             'status' => 'nullable|string|max:255',
+            'image' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:2048'
         ];
     }
 
@@ -75,6 +77,7 @@ class CustomerRequest extends FormRequest
             'city' => 'nullable|string|max:255',
             'state' => 'nullable|string|max:255',
             'status' => 'nullable|string|max:255',
+            'image' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:2048'
         ];
     }
 

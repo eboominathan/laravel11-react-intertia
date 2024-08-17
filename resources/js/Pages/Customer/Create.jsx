@@ -83,6 +83,7 @@ export default function Create({ auth }) {
                   className="block w-full mt-1"
                   onChange={(e) => setData("image", e.target.files[0])}
                 />
+                 <InputError message={errors.image} className="mt-2" />
                 </div>
                 <div className="w-full px-2 md:w-1/2">
                

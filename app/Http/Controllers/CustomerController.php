@@ -1,4 +1,5 @@
 <?php
+
 namespace App\Http\Controllers;
 
 use App\Http\Requests\CustomerRequest;
@@ -10,16 +11,17 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
 
-class CustomerController extends Controller{
-    protected$customerService;
-    protected$responseService;
+class CustomerController extends Controller
+{
+    protected $customerService;
+    protected $responseService;
 
     /**
      * Create a new controller instance.
      *
      * @param CustomerService $customerService
      * @param ResponseService $responseService
-     */public function __construct(CustomerService $customerService, ResponseService $responseService)
+     */ public function __construct(CustomerService $customerService, ResponseService $responseService)
     {
         $this->customerService = $customerService;
         $this->responseService = $responseService;
@@ -28,7 +30,7 @@ class CustomerController extends Controller{
     /**
      * Display a listing of the customers. 
      */
-    public function index() 
+    public function index()
     {
         $query = Customer::query();
 
@@ -57,7 +59,7 @@ class CustomerController extends Controller{
      * Show the form for creating a new customer.
      *
      * @return \Inertia\Response
-     */public function create()
+     */ public function create()
     {
         return inertia("Customer/Create");
     }
@@ -66,14 +68,14 @@ class CustomerController extends Controller{
      * Store a newly created customer in storage.
      *
      * @param CustomerRequest $request 
-     */public function store(CustomerRequest $request)
+     */ public function store(CustomerRequest $request)
     {
         $data = $request->validated();
         $image = $data['image'] ?? null;
         $data['created_by'] = Auth::id();
         $data['updated_by'] = Auth::id();
         if ($image) {
-            $data['image_path'] = $image->store('project/' . Str::random(), 'public');
+            $data['image_path'] = $image->store('customer/' . Str::random(), 'public');
         }
         Customer::create($data);
         return to_route('customer.index')
@@ -85,7 +87,7 @@ class CustomerController extends Controller{
      *
      * @param Customer $customer
      * @return \Inertia\Response
-     */public function show(Customer $customer)
+     */ public function show(Customer $customer)
     {
         return inertia('Customer/Show', [
             'customer' => new CustomerResource($customer),
@@ -98,7 +100,7 @@ class CustomerController extends Controller{
      *
      * @param Customer $customer
      * @return \Inertia\Response
-     */public function edit(Customer $customer)
+     */ public function edit(Customer $customer)
     {
         return inertia('Customer/Edit', [
             'customer' => new CustomerResource($customer),
@@ -110,16 +112,15 @@ class CustomerController extends Controller{
      *
      * @param CustomerRequest $request
      * @param Customer $customer 
-     */public function update(CustomerRequest $request, Customer $customer)
+     */ public function update(CustomerRequest $request, Customer $customer)
     {
         $data = $request->validated();
         $image = $data['image'] ?? null;
+     
         $data['updated_by'] = Auth::id();
+
         if ($image) {
-            if ($customer->image_path) {
-                Storage::disk('public')->deleteDirectory(dirname($customer->image_path));
-            }
-            $data['image_path'] = $image->store('project/' . Str::random(), 'public');
+            $data['image_path'] = $image->store('customer/' . Str::random(), 'public');
         }
         $customer->update($data);
 

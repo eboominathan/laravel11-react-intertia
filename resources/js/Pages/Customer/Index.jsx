@@ -9,7 +9,12 @@ import {
 import { Head, Link, router } from "@inertiajs/react";
 import TableHeading from "@/Components/TableHeading";
 
-export default function Index({ auth, customers, queryParams = null, success }) {
+export default function Index({
+  auth,
+  customers,
+  queryParams = null,
+  success,
+}) {
   queryParams = queryParams || {};
   const searchFieldChanged = (name, value) => {
     if (value) {
@@ -124,7 +129,7 @@ export default function Index({ auth, customers, queryParams = null, success }) 
                       >
                         Create Date
                       </TableHeading>
-                   
+
                       <th className="px-3 py-3">Created By</th>
                       <th className="px-3 py-3 text-right">Actions</th>
                     </tr>
@@ -172,19 +177,35 @@ export default function Index({ auth, customers, queryParams = null, success }) 
                       >
                         <td className="px-3 py-2">{customer.id}</td>
                         <td className="px-3 py-2">
-                          <img src={customer.image_path} style={{ width: 60 }} />
+                        <a href={`#lightbox`+customer.id}>
+                          <img
+                            src={customer.image_path}
+                            style={{ width: 60 }}
+                          />
+                          </a>
+                          <div
+                            id={`lightbox`+customer.id}
+                            class="hidden target:block fixed inset-0 p-10 bg-black/75 overflow-auto"
+                          >
+                            <a
+                              href="#"
+                              class="bg-white px-3 py-1 text-black absolute right-0 top-0"
+                            >
+                              X
+                            </a>
+                            <img
+                              src={customer.image_path}
+                              alt={customer.name}
+                            />
+                          </div>
                         </td>
                         <th className="px-3 py-2 text-gray-100 text-nowrap hover:underline">
                           <Link href={route("customer.show", customer.id)}>
                             {customer.name}
                           </Link>
                         </th>
-                        <td className="px-3 py-2">                       
-                            {customer.mobile_number}
-                        </td>
-                        <td className="px-3 py-2">                       
-                            {customer.area}
-                        </td>
+                        <td className="px-3 py-2">{customer.mobile_number}</td>
+                        <td className="px-3 py-2">{customer.area}</td>
                         <td className="px-3 py-2">
                           <span
                             className={
@@ -198,7 +219,7 @@ export default function Index({ auth, customers, queryParams = null, success }) 
                         <td className="px-3 py-2 text-nowrap">
                           {customer.created_at}
                         </td>
-                      
+
                         <td className="px-3 py-2">{customer.createdBy.name}</td>
                         <td className="px-3 py-2 text-nowrap">
                           <Link

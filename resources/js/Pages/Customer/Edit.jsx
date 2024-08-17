@@ -7,7 +7,7 @@ import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout";
 import { Head, Link, useForm } from "@inertiajs/react";
 
 export default function Edit({ auth, customer }) {
- 
+
   const { data, setData, post, errors, reset } = useForm({
     image: "",
     name: customer.data.name || "",
@@ -23,7 +23,7 @@ export default function Edit({ auth, customer }) {
 
   const onSubmit = (e) => {
     e.preventDefault();
-    post(route("customer.update", customer.id));
+    post(route("customer.update", { customer: customer.data.id }));
   };
 
   return (
@@ -164,6 +164,7 @@ export default function Edit({ auth, customer }) {
               <div className="mt-4">
                 <InputLabel htmlFor="status" value="Status" />
                 <SelectInput
+                  value={data.status}  
                   name="status"
                   id="status"
                   className="block w-full mt-1"
