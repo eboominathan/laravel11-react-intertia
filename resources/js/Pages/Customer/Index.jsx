@@ -82,7 +82,72 @@ export default function Index({
           <div className="overflow-hidden bg-white shadow-sm dark:bg-gray-800 sm:rounded-lg">
             <div className="p-6 text-gray-900 dark:text-gray-100">
               <div className="overflow-auto">
+                
                 <table className="w-full text-sm text-left text-gray-500 rtl:text-right dark:text-gray-400">
+                <thead className="text-xs text-gray-700 uppercase border-b-2 border-gray-500 bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
+                    <tr className="text-nowrap">
+                      <th className="px-3 py-3"></th>
+                    
+                      
+                      <th className="px-3 py-3">
+                        <TextInput
+                          className="w-full"
+                          defaultValue={queryParams.name}
+                          placeholder="Customer Name"
+                          onBlur={(e) =>
+                            searchFieldChanged("name", e.target.value)
+                          }
+                          onKeyPress={(e) => onKeyPress("name", e)}
+                        />
+                      </th>
+                      <th className="px-3 py-3">
+                        <TextInput
+                          className="w-full"
+                          defaultValue={queryParams.mobile_number}
+                          placeholder="Mobile Number"
+                          onBlur={(e) =>
+                            searchFieldChanged("mobile_number", e.target.value)
+                          }
+                          onKeyPress={(e) => onKeyPress("mobile_number", e)}
+                        />
+                      </th>
+                      <th className="px-3 py-3">
+                        <TextInput
+                          className="w-full"
+                          defaultValue={queryParams.street}
+                          placeholder="Street"
+                          onBlur={(e) =>
+                            searchFieldChanged("street", e.target.value)
+                          }
+                          onKeyPress={(e) => onKeyPress("street", e)}
+                        />
+                      </th>
+                      <th className="px-3 py-3">
+                        <TextInput
+                          className="w-full"
+                          defaultValue={queryParams.area}
+                          placeholder="Area"
+                          onBlur={(e) =>
+                            searchFieldChanged("area", e.target.value)
+                          }
+                          onKeyPress={(e) => onKeyPress("area", e)}
+                        />
+                      </th>
+                      
+                      <th className="px-3 py-3">
+                      <TextInput
+                          className="w-full"
+                          defaultValue={queryParams.city}
+                          placeholder="City"
+                          onBlur={(e) =>
+                            searchFieldChanged("city", e.target.value)
+                          }
+                          onKeyPress={(e) => onKeyPress("city", e)}
+                        />
+                      </th>
+                      <th className="px-3 py-3"></th>
+                    </tr>
+                  </thead>
                   <thead className="text-xs text-gray-700 uppercase border-b-2 border-gray-500 bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
                     <tr className="text-nowrap">
                       <TableHeading
@@ -93,7 +158,7 @@ export default function Index({
                       >
                         ID
                       </TableHeading>
-                      <th className="px-3 py-3">Image</th>
+                  
                       <TableHeading
                         name="name"
                         sort_field={queryParams.sort_field}
@@ -110,65 +175,32 @@ export default function Index({
                         sort_direction={queryParams.sort_direction}
                         sortChanged={sortChanged}
                       >
+                        Street
+                      </TableHeading>
+                      <TableHeading
+                        name="area"
+                        sort_field={queryParams.sort_field}
+                        sort_direction={queryParams.sort_direction}
+                        sortChanged={sortChanged}
+                      >
                         Area
                       </TableHeading>
+                    
                       <TableHeading
-                        name="status"
+                        name="city"
                         sort_field={queryParams.sort_field}
                         sort_direction={queryParams.sort_direction}
                         sortChanged={sortChanged}
                       >
-                        Status
+                      City
                       </TableHeading>
 
-                      <TableHeading
-                        name="created_at"
-                        sort_field={queryParams.sort_field}
-                        sort_direction={queryParams.sort_direction}
-                        sortChanged={sortChanged}
-                      >
-                        Create Date
-                      </TableHeading>
+                 
 
-                      <th className="px-3 py-3">Created By</th>
                       <th className="px-3 py-3 text-right">Actions</th>
                     </tr>
                   </thead>
-                  {/* <thead className="text-xs text-gray-700 uppercase border-b-2 border-gray-500 bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
-                    <tr className="text-nowrap">
-                      <th className="px-3 py-3"></th>
-                      <th className="px-3 py-3"></th>
-                      <th className="px-3 py-3"></th>
-                      <th className="px-3 py-3">
-                        <TextInput
-                          className="w-full"
-                          defaultValue={queryParams.name}
-                          placeholder="Customer Name"
-                          onBlur={(e) =>
-                            searchFieldChanged("name", e.target.value)
-                          }
-                          onKeyPress={(e) => onKeyPress("name", e)}
-                        />
-                      </th>
-                      <th className="px-3 py-3">
-                        <SelectInput
-                          className="w-full"
-                          defaultValue={queryParams.status}
-                          onChange={(e) =>
-                            searchFieldChanged("status", e.target.value)
-                          }
-                        >
-                          <option value="">Select Status</option>
-                          <option value="active">Active</option>
-                          <option value="in_active">In Active</option>                          
-                        </SelectInput>
-                      </th>
-                      <th className="px-3 py-3"></th>
-                      <th className="px-3 py-3"></th>
-                      <th className="px-3 py-3"></th>
-                      <th className="px-3 py-3"></th>
-                    </tr>
-                  </thead> */}
+                
                   <tbody>
                     {customers.data.map((customer) => (
                       <tr
@@ -176,20 +208,23 @@ export default function Index({
                         key={customer.id}
                       >
                         <td className="px-3 py-2">{customer.id}</td>
-                        <td className="px-3 py-2">
-                        <a href={`#lightbox`+customer.id}>
-                          <img
-                            src={customer.image_path}
-                            style={{ width: 60 }}
-                          />
+                        
+                        <th className="px-3 py-2 text-gray-100 text-nowrap hover:underline">
+                          <div className="flex">
+                          <div className="image">
+                          <a href={`#lightbox` + customer.id}>
+                            <img
+                              src={customer.image_path}                           
+                              className="w-10 h-10 rounded-full" 
+                            />
                           </a>
                           <div
-                            id={`lightbox`+customer.id}
-                            class="hidden target:block fixed inset-0 p-10 bg-black/75 overflow-auto"
+                            id={`lightbox` + customer.id}
+                            className="fixed inset-0 hidden p-10 overflow-auto target:block bg-black/75"
                           >
                             <a
                               href="#"
-                              class="bg-white px-3 py-1 text-black absolute right-0 top-0"
+                              className="absolute top-0 right-0 px-3 py-1 text-black bg-white"
                             >
                               X
                             </a>
@@ -198,29 +233,22 @@ export default function Index({
                               alt={customer.name}
                             />
                           </div>
-                        </td>
-                        <th className="px-3 py-2 text-gray-100 text-nowrap hover:underline">
-                          <Link href={route("customer.show", customer.id)}>
+                          </div>
+                          <div className="gap-2 p-3 name">
+                          <Link href={route("customer.show", customer.id)} >
                             {customer.name}
                           </Link>
+                          </div>
+                          </div>
+                         
+                         
                         </th>
                         <td className="px-3 py-2">{customer.mobile_number}</td>
+                        <td className="px-3 py-2">{customer.street}</td>
                         <td className="px-3 py-2">{customer.area}</td>
-                        <td className="px-3 py-2">
-                          <span
-                            className={
-                              "px-2 py-1 rounded text-white " +
-                              CUSTOMER_STATUS_CLASS_MAP[customer.status]
-                            }
-                          >
-                            {CUSTOMER_STATUS_TEXT_MAP[customer.status]}
-                          </span>
-                        </td>
-                        <td className="px-3 py-2 text-nowrap">
-                          {customer.created_at}
-                        </td>
+                        
+                        <td className="px-3 py-2">{customer.city}</td>                   
 
-                        <td className="px-3 py-2">{customer.createdBy.name}</td>
                         <td className="px-3 py-2 text-nowrap">
                           <Link
                             href={route("customer.edit", customer.id)}

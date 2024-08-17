@@ -40,10 +40,20 @@ class CustomerController extends Controller
         if (request("name")) {
             $query->where("name", "like", "%" . request("name") . "%");
         }
-        if (request("status")) {
-            $query->where("status", request("status"));
+        if (request("mobile_number")) {
+            $query->where("mobile_number", "like", "%" . request("mobile_number") . "%");
         }
-
+        if (request("street")) {
+            $query->where("street", "like", "%" . request("street") . "%");
+        }
+        if (request("area")) {
+            $query->where("area", "like", "%" . request("area") . "%");
+        }
+     
+        if (request("city")) {
+            $query->where("city", "like", "%" . request("city") . "%");
+        }
+     
         $customers = $query->orderBy($sortField, $sortDirection)
             ->paginate(10)
             ->onEachSide(1);
