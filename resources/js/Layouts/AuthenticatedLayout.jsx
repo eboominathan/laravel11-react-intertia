@@ -27,31 +27,14 @@ export default function AuthenticatedLayout({ user, header, children }) {
                   active={route().current("dashboard")}
                 >
                   Dashboard
-                </NavLink>
-                <NavLink
-                  href={route("project.index")}
-                  active={route().current("project.index")}
-                >
-                  Projects
-                </NavLink>
-                <NavLink
-                  href={route("task.index")}
-                  active={route().current("task.index")}
-                >
-                  All Tasks
-                </NavLink>
+                </NavLink> 
                 <NavLink
                   href={route("user.index")}
                   active={route().current("user.index")}
                 >
                   Users
                 </NavLink>
-                <NavLink
-                  href={route("task.myTasks")}
-                  active={route().current("task.myTasks")}
-                >
-                  My Tasks
-                </NavLink>
+              
               </div>
             </div>
 
