@@ -5,23 +5,22 @@ namespace App\Http\Controllers;
 use App\Http\Requests\CategoryRequest;
 use App\Http\Resources\CategoryResource;
 use App\Services\CategoryService;
-use App\Services\ResponseService;
+
 
 class CategoryController extends Controller
 {
     protected $categoryService;
-    protected $responseService;
+
 
     /**
      * Create a new controller instance.
      *
      * @param CategoryService $categoryService
-     * @param ResponseService $responseService
+ 
      */
-    public function __construct(CategoryService $categoryService, ResponseService $responseService)
+    public function __construct(CategoryService $categoryService)
     {
         $this->categoryService = $categoryService;
-        $this->responseService = $responseService;
     }
 
     /**
