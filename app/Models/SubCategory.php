@@ -12,7 +12,14 @@ class SubCategory extends Model implements Auditable
     use HasFactory, SoftDeletes;
     use \OwenIt\Auditing\Auditable;
 
-    protected $fillable = ['name', 'category_id'];
+    protected $fillable = [
+        'name',
+        'category_id',
+        'status',
+        'created_by',
+        'updated_by',
+        'deleted_by',
+    ];
 
     public function category()
     {

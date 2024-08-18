@@ -2,64 +2,124 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Category;
-use Illuminate\Http\Request;
+use App\Http\Requests\CategoryRequest;
+use App\Http\Resources\CategoryResource;
+use App\Services\CategoryService;
+use App\Services\ResponseService;
 
 class CategoryController extends Controller
 {
+    protected $categoryService;
+    protected $responseService;
+
     /**
-     * Display a listing of the resource.
+     * Create a new controller instance.
+     *
+     * @param CategoryService $categoryService
+     * @param ResponseService $responseService
+     */
+    public function __construct(CategoryService $categoryService, ResponseService $responseService)
+    {
+        $this->categoryService = $categoryService;
+        $this->responseService = $responseService;
+    }
+
+    /**
+     * Display a listing of the categories.
      */
     public function index()
     {
-        //
+        $categories = $this->categoryService->getFilteredCategories(
+            request()->only('name'),
+            request('sort_field', 'created_at'),
+            request('sort_direction', 'desc')
+        );
+
+        return inertia("Category/Index", [
+            "categories" => CategoryResource::collection($categories),
+            'queryParams' => request()->query() ?: null,
+            'success' => session('success'),
+        ]);
     }
 
     /**
-     * Show the form for creating a new resource.
+     * Show the form for creating a new category.
+     *
+     * @return \Inertia\Response
      */
     public function create()
     {
-        //
+        return inertia("Category/Create");
     }
 
     /**
-     * Store a newly created resource in storage.
+     * Store a newly created category in storage.
+     *
+     * @param CategoryRequest $request
      */
-    public function store(Request $request)
+    public function store(CategoryRequest $request)
     {
-        //
+        $this->categoryService->createCategory($request->validated());
+
+        return to_route('category.index')
+            ->with('success', 'Category was created');
     }
 
     /**
-     * Display the specified resource.
+     * Display the specified category.
+     *
+     * @param int $id
+     * @return \Inertia\Response
      */
-    public function show(Category $category)
+    public function show($id)
     {
-        //
+        $category = $this->categoryService->getCategoryById($id);
+
+        return inertia('Category/Show', [
+            'category' => new CategoryResource($category),
+            'success' => session('success'),
+        ]);
     }
 
     /**
-     * Show the form for editing the specified resource.
+     * Show the form for editing the specified category.
+     *
+     * @param int $id
+     * @return \Inertia\Response
      */
-    public function edit(Category $category)
+    public function edit($id)
     {
-        //
+        $category = $this->categoryService->getCategoryById($id);
+
+        return inertia('Category/Edit', [
+            'category' => new CategoryResource($category),
+        ]);
     }
 
     /**
-     * Update the specified resource in storage.
+     * Update the specified category in storage.
+     *
+     * @param CategoryRequest $request
+     * @param int $id
      */
-    public function update(Request $request, Category $category)
+    public function update(CategoryRequest $request, $id)
     {
-        //
+        $this->categoryService->updateCategory($id, $request->validated());
+
+        return to_route('category.index')
+            ->with('success', "Category was updated");
     }
 
     /**
-     * Remove the specified resource from storage.
+     * Remove the specified category from storage.
+     *
+     * @param int $id
      */
-    public function destroy(Category $category)
+    public function destroy($id)
     {
-        //
+        $this->categoryService->deleteCategory($id);
+
+        return to_route('category.index')
+            ->with('success', "Category was deleted");
     }
 }

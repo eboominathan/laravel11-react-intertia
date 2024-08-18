@@ -17,7 +17,8 @@ return new class extends Migration
             $table->enum('name', ['jeevan_praman', 'ration', 'aadhar', 'voter_id', 'pan', 'pf', 'others']);
             $table->string('service_type');
             $table->string('acknowledgement_no')->nullable();
-            $table->string('status')->default('pending');
+            $table->enum('status',['active','inactive'])->default('active');
+            $table->string('service_status')->nullable();
             $table->enum('payment_status',['paid','unpaid'])->default('unpaid');
             $table->string('follower_name');
             $table->string('location')->nullable();
@@ -25,9 +26,9 @@ return new class extends Migration
             $table->foreignId('customer_id')->constrained('customers')->nullable();
             $table->foreignId('category_id')->constrained('categories')->nullable();
             $table->foreignId('subcategory_id')->constrained('sub_categories')->nullable();
-            $table->foreignId('created_by')->constrained('users')->nullable();
-            $table->foreignId('updated_by')->constrained('users')->nullable();
-            $table->foreignId('deleted_by')->constrained('users')->nullable();
+            $table->foreignId('created_by')->nullable()->constrained('users');
+            $table->foreignId('updated_by')->nullable()->constrained('users');
+            $table->foreignId('deleted_by')->nullable()->constrained('users');
             $table->timestamps();
             $table->softDeletes();
         });

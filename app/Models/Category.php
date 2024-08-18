@@ -9,10 +9,17 @@ use OwenIt\Auditing\Contracts\Auditable;
 
 class Category extends Model implements Auditable
 {
-    use HasFactory,SoftDeletes;
+    use HasFactory, SoftDeletes;
     use \OwenIt\Auditing\Auditable;
 
-    protected $fillable = ['name','image_path','status'];
+    protected $fillable = [
+        'name',
+        'image_path',
+        'status',
+        'created_by',
+        'updated_by',
+        'deleted_by',
+    ];
 
     public function services()
     {

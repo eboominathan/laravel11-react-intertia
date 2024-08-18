@@ -41,10 +41,13 @@ export default function AuthenticatedLayout({ user, header, children }) {
                   Customers
                 </NavLink>
                 <NavLink
-                  submenu={[
-                    { label: "Category", href: "/category" },
-                    { label: "Sub Category", href: "/sub_category" },
-                  ]}
+                   submenu={[
+                    { label: "Category", href: route("category.index"), active: route().current("category.index") },
+                    { label: "Sub Category", href: route("subcategory.index"), active: route().current("subcategory.index") },
+                ]}
+                active={
+                    route().current("category.index") || route().current("subcategory.index")
+                }
                 >
                   Masters
                 </NavLink>

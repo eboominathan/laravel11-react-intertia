@@ -11,26 +11,21 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('services', function (Blueprint $table) {
+        Schema::create('customers', function (Blueprint $table) {
             $table->id();
-            $table->date('date');
-            $table->enum('name', ['jeevan_praman', 'ration', 'aadhar', 'voter_id', 'pan', 'pf', 'others']);
-            $table->string('service_type');
-            $table->string('acknowledgement_no')->nullable();
-            $table->string('status')->default('pending');
-            $table->enum('payment_status',['paid','unpaid'])->default('unpaid');
-            $table->string('follower_name');
-            $table->string('location')->nullable();
-            $table->text('comments')->nullable();
-
-            // Assuming the correct table names are plural
-            $table->foreignId('customer_id')->nullable()->constrained('customers');
-            $table->foreignId('category_id')->nullable()->constrained('categories');
-            $table->foreignId('subcategory_id')->nullable()->constrained('subcategories');
-            $table->foreignId('created_by')->nullable()->constrained('users');
-            $table->foreignId('updated_by')->nullable()->constrained('users');
-            $table->foreignId('deleted_by')->nullable()->constrained('users');
-
+            $table->string('name');
+            $table->string('mobile_number');
+            $table->string('email');
+            $table->string('street')->nullable();
+            $table->string('area')->nullable();
+            $table->string('city')->nullable();
+            $table->string('state')->nullable();
+            $table->string('status')->default('active');
+            $table->enum('status',['active','inactive'])->default('active');
+            $table->string('image_path')->nullable();
+            $table->foreignId('created_by')->constrained('users')->nullable();
+            $table->foreignId('updated_by')->constrained('users')->nullable();
+            $table->foreignId('deleted_by')->constrained('users')->nullable();
             $table->timestamps();
             $table->softDeletes();
         });
@@ -41,6 +36,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('services');
+        Schema::dropIfExists('customers');
     }
 };
