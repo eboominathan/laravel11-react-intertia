@@ -14,11 +14,10 @@ return new class extends Migration
         Schema::create('services', function (Blueprint $table) {
             $table->id();
             $table->date('date');
-            $table->enum('name', ['jeevan_praman', 'ration', 'aadhar', 'voter_id', 'pan', 'pf', 'others']);
-            $table->string('service_type');
+            $table->string('name')->nullable();            
             $table->string('acknowledgement_no')->nullable();
             $table->enum('status',['active','inactive'])->default('active');
-            $table->string('service_status')->nullable();
+            $table->string('service_status')->nullable()->default('pending');
             $table->enum('payment_status',['paid','unpaid'])->default('unpaid');
             $table->string('follower_name');
             $table->string('location')->nullable();

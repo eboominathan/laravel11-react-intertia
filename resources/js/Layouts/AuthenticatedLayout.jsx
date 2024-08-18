@@ -44,9 +44,10 @@ export default function AuthenticatedLayout({ user, header, children }) {
                    submenu={[
                     { label: "Category", href: route("category.index"), active: route().current("category.index") },
                     { label: "Sub Category", href: route("subcategory.index"), active: route().current("subcategory.index") },
+                    { label: "Service", href: route("service.index"), active: route().current("service.index") },
                 ]}
                 active={
-                    route().current("category.index") || route().current("subcategory.index")
+                    route().current("category.index") || route().current("subcategory.index") || route().current("service.index") 
                 }
                 >
                   Masters

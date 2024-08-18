@@ -16,6 +16,7 @@ class Service extends Model implements Auditable
         'date',
         'name',
         'category_id',
+        'customer_id',
         'subcategory_id',
         'service_type',
         'acknowledgement_no',
@@ -23,17 +24,38 @@ class Service extends Model implements Auditable
         'payment_status',
         'follower_name',
         'location',
-        'comments'
+        'comments',
+        'created_by',
+        'updated_by',
+        'deleted_by'
     ];
 
 
     public function category()
     {
-        return $this->belongsTo(Category::class);
+        return $this->belongsTo(Category::class,'category_id');
     }
 
     public function subCategory()
     {
-        return $this->belongsTo(SubCategory::class);
+        return $this->belongsTo(SubCategory::class,'subcategory_id');
     }
+    public function customer()
+    {
+        return $this->belongsTo(Customer::class, 'customer_id');
+    }
+    public function createdBy()
+    {
+        return $this->belongsTo(User::class, 'created_by');
+    }
+
+    public function updatedBy()
+    {
+        return $this->belongsTo(User::class, 'updated_by');
+    }
+    public function deletedBy()
+    {
+        return $this->belongsTo(User::class, 'deleted_by');
+    }
+
 }

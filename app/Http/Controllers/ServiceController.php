@@ -1,65 +1,138 @@
 <?php
-
+ 
 namespace App\Http\Controllers;
 
-use App\Models\Service;
-use Illuminate\Http\Request;
+use App\Http\Requests\ServiceRequest;
+use App\Http\Resources\ServiceResource;
+use App\Models\Category;
+use App\Models\SubCategory;
+use App\Services\ServiceService;
 
 class ServiceController extends Controller
 {
+    protected $serviceService;
+
     /**
-     * Display a listing of the resource.
+     * Create a new controller instance.
+     *
+     * @param ServiceService $serviceService
+     */
+    public function __construct(ServiceService $serviceService)
+    {
+        $this->serviceService = $serviceService;
+    }
+
+    /**
+     * Display a listing of the services.
+     *
+     * @return \Inertia\Response
      */
     public function index()
     {
-        //
+        $services = $this->serviceService->getFilteredServices(
+            request()->only('name', 'category_id', 'subcategory_id'),
+            request('sort_field', 'created_at'),
+            request('sort_direction', 'desc')
+        );
+
+        return inertia("Service/Index", [
+            "services" => ServiceResource::collection($services),
+            'queryParams' => request()->query() ?: null,
+            'success' => session('success'),
+        ]);
     }
 
     /**
-     * Show the form for creating a new resource.
+     * Show the form for creating a new service.
+     *
+     * @return \Inertia\Response
      */
     public function create()
     {
-        //
+        $categories = $this->serviceService->getAllCategories(); 
+        $subcategories = $this->serviceService->getAllSubCategories();
+
+        return inertia("Service/Create", [
+            'categories' => $categories,
+            'subcategories' => $subcategories,
+        ]);
     }
 
     /**
-     * Store a newly created resource in storage.
+     * Store a newly created service in storage.
+     *
+     * @param ServiceRequest $request
+     * @return \Illuminate\Http\RedirectResponse
      */
-    public function store(Request $request)
+    public function store(ServiceRequest $request)
     {
-        //
+        $this->serviceService->createService($request->validated());
+
+        return redirect()->route('service.index')
+            ->with('success', 'Service was created');
     }
 
     /**
-     * Display the specified resource.
+     * Display the specified service.
+     *
+     * @param int $id
+     * @return \Inertia\Response
      */
-    public function show(Service $service)
+    public function show($id)
     {
-        //
+        $service = $this->serviceService->getServiceById($id);
+
+        return inertia('Service/Show', [
+            'service' => new ServiceResource($service),
+            'success' => session('success'),
+        ]);
     }
 
     /**
-     * Show the form for editing the specified resource.
+     * Show the form for editing the specified service.
+     *
+     * @param int $id
+     * @return \Inertia\Response
      */
-    public function edit(Service $service)
+    public function edit($id)
     {
-        //
+        $service = $this->serviceService->getServiceById($id);
+        $categories = Category::all(); // Fetch categories if needed
+        $subcategories = Subcategory::all(); // Fetch subcategories if needed
+
+        return inertia('Service/Edit', [
+            'service' => new ServiceResource($service),
+            'categories' => $categories,
+            'subcategories' => $subcategories,
+        ]);
     }
 
     /**
-     * Update the specified resource in storage.
+     * Update the specified service in storage.
+     *
+     * @param ServiceRequest $request
+     * @param int $id
+     * @return \Illuminate\Http\RedirectResponse
      */
-    public function update(Request $request, Service $service)
+    public function update(ServiceRequest $request, $id)
     {
-        //
+        $this->serviceService->updateService($id, $request->validated());
+
+        return redirect()->route('service.index')
+            ->with('success', 'Service was updated');
     }
 
     /**
-     * Remove the specified resource from storage.
+     * Remove the specified service from storage.
+     *
+     * @param int $id
+     * @return \Illuminate\Http\RedirectResponse
      */
-    public function destroy(Service $service)
+    public function destroy($id)
     {
-        //
+        $this->serviceService->deleteService($id);
+
+        return redirect()->route('service.index')
+            ->with('success', 'Service was deleted');
     }
 }

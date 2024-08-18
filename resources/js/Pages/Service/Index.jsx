@@ -2,20 +2,19 @@ import Pagination from "@/Components/Pagination";
 import SelectInput from "@/Components/SelectInput";
 import TextInput from "@/Components/TextInput";
 import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout";
-import {
-  CUSTOMER_STATUS_CLASS_MAP,
-  CUSTOMER_STATUS_TEXT_MAP,
-} from "@/constants.jsx";
 import { Head, Link, router } from "@inertiajs/react";
 import TableHeading from "@/Components/TableHeading";
 
 export default function Index({
   auth,
-  customers,
+  services,
   queryParams = null,
   success,
+  categories,
+  subcategories,
 }) {
   queryParams = queryParams || {};
+
   const searchFieldChanged = (name, value) => {
     if (value) {
       queryParams[name] = value;
@@ -23,7 +22,7 @@ export default function Index({
       delete queryParams[name];
     }
 
-    router.get(route("customer.index"), queryParams);
+    router.get(route("service.index"), queryParams);
   };
 
   const onKeyPress = (name, e) => {
@@ -34,23 +33,20 @@ export default function Index({
 
   const sortChanged = (name) => {
     if (name === queryParams.sort_field) {
-      if (queryParams.sort_direction === "asc") {
-        queryParams.sort_direction = "desc";
-      } else {
-        queryParams.sort_direction = "asc";
-      }
+      queryParams.sort_direction =
+        queryParams.sort_direction === "asc" ? "desc" : "asc";
     } else {
       queryParams.sort_field = name;
       queryParams.sort_direction = "asc";
     }
-    router.get(route("customer.index"), queryParams);
+    router.get(route("service.index"), queryParams);
   };
 
-  const deleteCustomer = (customer) => {
-    if (!window.confirm("Are you sure you want to delete the customer?")) {
+  const deleteService = (service) => {
+    if (!window.confirm("Are you sure you want to delete the service?")) {
       return;
     }
-    router.delete(route("customer.destroy", customer.id));
+    router.delete(route("service.destroy", service.id));
   };
 
   return (
@@ -59,10 +55,10 @@ export default function Index({
       header={
         <div className="flex items-center justify-between">
           <h2 className="text-xl font-semibold leading-tight text-gray-800 dark:text-gray-200">
-            Customers
+            Services
           </h2>
           <Link
-            href={route("customer.create")}
+            href={route("service.create")}
             className="px-3 py-1 text-white transition-all rounded shadow bg-emerald-500 hover:bg-emerald-600"
           >
             Add new
@@ -70,7 +66,7 @@ export default function Index({
         </div>
       }
     >
-      <Head title="Customers" />
+      <Head title="Services" />
 
       <div className="py-12">
         <div className="mx-auto max-w-7xl sm:px-6 lg:px-8">
@@ -86,7 +82,6 @@ export default function Index({
                   <thead className="text-xs text-gray-700 uppercase border-b-2 border-gray-500 bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
                     <tr className="text-nowrap">
                       <th className="px-3 py-3"></th>
-
                       <th className="px-3 py-3">
                         <TextInput
                           className="w-full"
@@ -98,51 +93,9 @@ export default function Index({
                           onKeyPress={(e) => onKeyPress("name", e)}
                         />
                       </th>
-                      <th className="px-3 py-3">
-                        <TextInput
-                          className="w-full"
-                          defaultValue={queryParams.mobile_number}
-                          placeholder="Mobile Number"
-                          onBlur={(e) =>
-                            searchFieldChanged("mobile_number", e.target.value)
-                          }
-                          onKeyPress={(e) => onKeyPress("mobile_number", e)}
-                        />
-                      </th>
-                      <th className="px-3 py-3">
-                        <TextInput
-                          className="w-full"
-                          defaultValue={queryParams.street}
-                          placeholder="Street"
-                          onBlur={(e) =>
-                            searchFieldChanged("street", e.target.value)
-                          }
-                          onKeyPress={(e) => onKeyPress("street", e)}
-                        />
-                      </th>
-                      <th className="px-3 py-3">
-                        <TextInput
-                          className="w-full"
-                          defaultValue={queryParams.area}
-                          placeholder="Area"
-                          onBlur={(e) =>
-                            searchFieldChanged("area", e.target.value)
-                          }
-                          onKeyPress={(e) => onKeyPress("area", e)}
-                        />
-                      </th>
-
-                      <th className="px-3 py-3">
-                        <TextInput
-                          className="w-full"
-                          defaultValue={queryParams.city}
-                          placeholder="City"
-                          onBlur={(e) =>
-                            searchFieldChanged("city", e.target.value)
-                          }
-                          onKeyPress={(e) => onKeyPress("city", e)}
-                        />
-                      </th>
+                      <th className="px-3 py-3"></th>
+                      <th className="px-3 py-3"></th>
+                      <th className="px-3 py-3"></th>
                       <th className="px-3 py-3"></th>
                     </tr>
                   </thead>
@@ -156,7 +109,6 @@ export default function Index({
                       >
                         ID
                       </TableHeading>
-
                       <TableHeading
                         name="name"
                         sort_field={queryParams.sort_field}
@@ -165,93 +117,46 @@ export default function Index({
                       >
                         Name
                       </TableHeading>
-                      <th className="px-3 py-3">Mobile Number</th>
-
-                      <TableHeading
-                        name="area"
-                        sort_field={queryParams.sort_field}
-                        sort_direction={queryParams.sort_direction}
-                        sortChanged={sortChanged}
-                      >
-                        Street
-                      </TableHeading>
-                      <TableHeading
-                        name="area"
-                        sort_field={queryParams.sort_field}
-                        sort_direction={queryParams.sort_direction}
-                        sortChanged={sortChanged}
-                      >
-                        Area
-                      </TableHeading>
-
-                      <TableHeading
-                        name="city"
-                        sort_field={queryParams.sort_field}
-                        sort_direction={queryParams.sort_direction}
-                        sortChanged={sortChanged}
-                      >
-                        City
-                      </TableHeading>
+                      <th className="px-3 py-3">Category</th>
+                      <th className="px-3 py-3">Subcategory</th>
+                      <th className="px-3 py-3">Status</th>
 
                       <th className="px-3 py-3 text-right">Actions</th>
                     </tr>
                   </thead>
 
                   <tbody>
-                    {customers.data.map((customer) => (
+                    {services.data.map((service) => (
                       <tr
                         className="bg-white border-b dark:bg-gray-800 dark:border-gray-700"
-                        key={customer.id}
+                        key={service.id}
                       >
-                        <td className="px-3 py-2">{customer.id}</td>
+                        <td className="px-3 py-2">{service.id}</td>
 
-                        <th className="px-3 py-2 text-gray-100 text-nowrap hover:underline">
-                          <div className="flex">
-                            <div className="image">
-                              <a href={`#lightbox` + customer.id}>
-                                <img
-                                  src={customer.image_path}
-                                  className="w-10 h-10 rounded-full"
-                                />
-                              </a>
-                              <div
-                                id={`lightbox` + customer.id}
-                                className="fixed inset-0 hidden p-10 overflow-auto target:block bg-black/75"
-                              >
-                                <a
-                                  href="#"
-                                  className="absolute top-0 right-0 px-3 py-1 text-black bg-white"
-                                >
-                                  X
-                                </a>
-                                <img
-                                  src={customer.image_path}
-                                  alt={customer.name}
-                                />
-                              </div>
-                            </div>
-                            <div className="gap-2 p-3 name">
-                              <Link href={route("customer.show", customer.id)}>
-                                {customer.name}
-                              </Link>
-                            </div>
-                          </div>
-                        </th>
-                        <td className="px-3 py-2">{customer.mobile_number}</td>
-                        <td className="px-3 py-2">{customer.street}</td>
-                        <td className="px-3 py-2">{customer.area}</td>
-
-                        <td className="px-3 py-2">{customer.city}</td>
+                        <td className="px-3 py-2 text-gray-100 text-nowrap hover:underline">
+                          <Link href={route("service.show", service.id)}>
+                            {service.name}
+                          </Link>
+                        </td>
+                        <td className="px-3 py-2">
+                          {service.category ? service.category.name : "N/A"}
+                        </td>
+                        <td className="px-3 py-2">
+                          {service.subcategory
+                            ? service.subcategory.name
+                            : "N/A"}
+                        </td>
+                        <td className="px-3 py-2">{service.status}</td>
 
                         <td className="px-3 py-2 text-nowrap">
                           <Link
-                            href={route("customer.edit", customer.id)}
+                            href={route("service.edit", service.id)}
                             className="mx-1 font-medium text-blue-600 dark:text-blue-500 hover:underline"
                           >
                             Edit
                           </Link>
                           <button
-                            onClick={(e) => deleteCustomer(customer)}
+                            onClick={() => deleteService(service)}
                             className="mx-1 font-medium text-red-600 dark:text-red-500 hover:underline"
                           >
                             Delete
@@ -262,7 +167,7 @@ export default function Index({
                   </tbody>
                 </table>
               </div>
-              <Pagination links={customers.meta.links} />
+              <Pagination links={services.meta.links} />
             </div>
           </div>
         </div>
