@@ -27,7 +27,7 @@ export default function AuthenticatedLayout({ user, header, children }) {
                   active={route().current("dashboard")}
                 >
                   Dashboard
-                </NavLink> 
+                </NavLink>
                 <NavLink
                   href={route("user.index")}
                   active={route().current("user.index")}
@@ -40,7 +40,14 @@ export default function AuthenticatedLayout({ user, header, children }) {
                 >
                   Customers
                 </NavLink>
-              
+                <NavLink
+                  submenu={[
+                    { label: "Category", href: "/category" },
+                    { label: "Sub Category", href: "/sub_category" },
+                  ]}
+                >
+                  Masters
+                </NavLink>
               </div>
             </div>
 

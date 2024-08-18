@@ -4,11 +4,9 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\CustomerRequest;
 use App\Http\Resources\CustomerResource;
-use App\Models\Customer;
 use App\Services\CustomerService;
 use App\Services\ResponseService;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
 
 class CustomerController extends Controller
@@ -21,42 +19,23 @@ class CustomerController extends Controller
      *
      * @param CustomerService $customerService
      * @param ResponseService $responseService
-     */ public function __construct(CustomerService $customerService, ResponseService $responseService)
+     */
+    public function __construct(CustomerService $customerService, ResponseService $responseService)
     {
         $this->customerService = $customerService;
         $this->responseService = $responseService;
     }
 
     /**
-     * Display a listing of the customers. 
+     * Display a listing of the customers.
      */
     public function index()
     {
-        $query = Customer::query();
-
-        $sortField = request("sort_field", 'created_at');
-        $sortDirection = request("sort_direction", "desc");
-
-        if (request("name")) {
-            $query->where("name", "like", "%" . request("name") . "%");
-        }
-        if (request("mobile_number")) {
-            $query->where("mobile_number", "like", "%" . request("mobile_number") . "%");
-        }
-        if (request("street")) {
-            $query->where("street", "like", "%" . request("street") . "%");
-        }
-        if (request("area")) {
-            $query->where("area", "like", "%" . request("area") . "%");
-        }
-     
-        if (request("city")) {
-            $query->where("city", "like", "%" . request("city") . "%");
-        }
-     
-        $customers = $query->orderBy($sortField, $sortDirection)
-            ->paginate(10)
-            ->onEachSide(1);
+        $customers = $this->customerService->getFilteredCustomers(
+            request()->only('name', 'mobile_number', 'street', 'area', 'city'),
+            request('sort_field', 'created_at'),
+            request('sort_direction', 'desc')
+        );
 
         return inertia("Customer/Index", [
             "customers" => CustomerResource::collection($customers),
@@ -69,7 +48,8 @@ class CustomerController extends Controller
      * Show the form for creating a new customer.
      *
      * @return \Inertia\Response
-     */ public function create()
+     */
+    public function create()
     {
         return inertia("Customer/Create");
     }
@@ -77,17 +57,20 @@ class CustomerController extends Controller
     /**
      * Store a newly created customer in storage.
      *
-     * @param CustomerRequest $request 
-     */ public function store(CustomerRequest $request)
+     * @param CustomerRequest $request
+     */
+    public function store(CustomerRequest $request)
     {
         $data = $request->validated();
-        $image = $data['image'] ?? null;
         $data['created_by'] = Auth::id();
         $data['updated_by'] = Auth::id();
-        if ($image) {
+
+        if ($image = $data['image'] ?? null) {
             $data['image_path'] = $image->store('customer/' . Str::random(), 'public');
         }
-        Customer::create($data);
+
+        $this->customerService->createCustomer($data);
+
         return to_route('customer.index')
             ->with('success', 'Customer was created');
     }
@@ -95,10 +78,13 @@ class CustomerController extends Controller
     /**
      * Display the specified customer.
      *
-     * @param Customer $customer
+     * @param int $id
      * @return \Inertia\Response
-     */ public function show(Customer $customer)
+     */
+    public function show($id)
     {
+        $customer = $this->customerService->getCustomerById($id);
+
         return inertia('Customer/Show', [
             'customer' => new CustomerResource($customer),
             'success' => session('success'),
@@ -108,10 +94,13 @@ class CustomerController extends Controller
     /**
      * Show the form for editing the specified customer.
      *
-     * @param Customer $customer
+     * @param int $id
      * @return \Inertia\Response
-     */ public function edit(Customer $customer)
+     */
+    public function edit($id)
     {
+        $customer = $this->customerService->getCustomerById($id);
+
         return inertia('Customer/Edit', [
             'customer' => new CustomerResource($customer),
         ]);
@@ -121,35 +110,33 @@ class CustomerController extends Controller
      * Update the specified customer in storage.
      *
      * @param CustomerRequest $request
-     * @param Customer $customer 
-     */ public function update(CustomerRequest $request, Customer $customer)
+     * @param int $id
+     */
+    public function update(CustomerRequest $request, $id)
     {
         $data = $request->validated();
-        $image = $data['image'] ?? null;
-     
         $data['updated_by'] = Auth::id();
 
-        if ($image) {
+        if ($image = $data['image'] ?? null) {
             $data['image_path'] = $image->store('customer/' . Str::random(), 'public');
         }
-        $customer->update($data);
 
+        $this->customerService->updateCustomer($id, $data);
 
         return to_route('customer.index')
-            ->with('success', "Customer \"$customer->name\" was updated");
+            ->with('success', "Customer was updated");
     }
 
     /**
      * Remove the specified customer from storage.
      *
-     * @param Customer $customer 
+     * @param int $id
      */
-    public function destroy(Customer $customer)
+    public function destroy($id)
     {
-        $name = $customer->name;
-        $this->customerService->deleteCustomer($customer->id);
+        $this->customerService->deleteCustomer($id);
 
         return to_route('customer.index')
-            ->with('success', "Customer \"$name\" was deleted");
+            ->with('success', "Customer was deleted");
     }
 }
