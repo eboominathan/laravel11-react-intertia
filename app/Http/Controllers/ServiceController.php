@@ -30,7 +30,7 @@ class ServiceController extends Controller
     public function index()
     {
         $services = $this->serviceService->getFilteredServices(
-            request()->only('name', 'category_id', 'subcategory_id'),
+            request()->only('name'),
             request('sort_field', 'created_at'),
             request('sort_direction', 'desc')
         );

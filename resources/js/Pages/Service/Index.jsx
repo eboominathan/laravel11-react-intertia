@@ -82,6 +82,7 @@ export default function Index({
                   <thead className="text-xs text-gray-700 uppercase border-b-2 border-gray-500 bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
                     <tr className="text-nowrap">
                       <th className="px-3 py-3"></th>
+                      <th className="px-3 py-3"></th>
                       <th className="px-3 py-3">
                         <TextInput
                           className="w-full"
@@ -109,6 +110,7 @@ export default function Index({
                       >
                         ID
                       </TableHeading>
+                      <th className="px-3 py-3">Date</th>
                       <TableHeading
                         name="name"
                         sort_field={queryParams.sort_field}
@@ -117,8 +119,8 @@ export default function Index({
                       >
                         Name
                       </TableHeading>
-                      <th className="px-3 py-3">Category</th>
-                      <th className="px-3 py-3">Subcategory</th>
+                      <th className="px-3 py-3">Type</th>
+                      <th className="px-3 py-3">Service</th>
                       <th className="px-3 py-3">Status</th>
 
                       <th className="px-3 py-3 text-right">Actions</th>
@@ -132,6 +134,7 @@ export default function Index({
                         key={service.id}
                       >
                         <td className="px-3 py-2">{service.id}</td>
+                        <td className="px-3 py-2">{service.date}</td>
 
                         <td className="px-3 py-2 text-gray-100 text-nowrap hover:underline">
                           <Link href={route("service.show", service.id)}>
