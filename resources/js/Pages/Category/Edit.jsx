@@ -43,8 +43,8 @@ export default function Edit({ auth, category }) {
                 <div className="mb-4">
                   <img
                     src={category.data.image_path}
-                    className="w-64"
-                    alt="Category"
+                    className="w-32"
+                    alt={category.data.name}
                   />
                 </div>
               )}

@@ -16,7 +16,7 @@ export default function Create({ auth }) {
     area: "",
     city: "",
     state: "",
-    status: "",
+    status: "active",
   });
 
   const onSubmit = (e) => {
@@ -161,6 +161,7 @@ export default function Create({ auth }) {
                   name="status"
                   id="status"
                   className="block w-full mt-1"
+                  value={data.status}
                   onChange={(e) => setData("status", e.target.value)}
                 >
                   <option value="">Select Status</option>

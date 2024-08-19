@@ -10,7 +10,7 @@ export default function Create({ auth, categories }) {
     image: "",
     name: "",
     category_id: "",
-    status: "",
+    status: "active",
   });
 
   const onSubmit = (e) => {

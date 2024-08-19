@@ -3,6 +3,7 @@ import TextInput from "@/Components/TextInput";
 import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout";
 import { Head, Link, router } from "@inertiajs/react";
 import TableHeading from "@/Components/TableHeading";
+import { useState } from "react";
 
 export default function Index({
   auth,
@@ -12,6 +13,8 @@ export default function Index({
 }) {
   queryParams = queryParams || {};
   
+  const [searchValue, setSearchValue] = useState(queryParams.name || "");
+
   const searchFieldChanged = (name, value) => {
     if (value) {
       queryParams[name] = value;
@@ -28,13 +31,15 @@ export default function Index({
     searchFieldChanged(name, e.target.value);
   };
 
+  const clearSearch = (name) => {
+    setSearchValue("");
+    searchFieldChanged(name, "");
+  };
+
   const sortChanged = (name) => {
     if (name === queryParams.sort_field) {
-      if (queryParams.sort_direction === "asc") {
-        queryParams.sort_direction = "desc";
-      } else {
-        queryParams.sort_direction = "asc";
-      }
+      queryParams.sort_direction =
+        queryParams.sort_direction === "asc" ? "desc" : "asc";
     } else {
       queryParams.sort_field = name;
       queryParams.sort_direction = "asc";
@@ -55,18 +60,18 @@ export default function Index({
       header={
         <div className="flex items-center justify-between">
           <h2 className="text-xl font-semibold leading-tight text-gray-800 dark:text-gray-200">
-            Categories {/* Updated text */}
+            Categories
           </h2>
           <Link
             href={route("category.create")}
             className="px-3 py-1 text-white transition-all rounded shadow bg-emerald-500 hover:bg-emerald-600"
           >
-            Add New {/* Updated text */}
+            Add New
           </Link>
         </div>
       }
     >
-      <Head title="Categories" /> {/* Updated title */}
+      <Head title="Categories" />
 
       <div className="py-12">
         <div className="mx-auto max-w-7xl sm:px-6 lg:px-8">
@@ -84,15 +89,24 @@ export default function Index({
                       <th className="px-3 py-3"></th>
 
                       <th className="px-3 py-3">
-                        <TextInput
-                          className="w-full"
-                          defaultValue={queryParams.name}
-                          placeholder="Name"
-                          onBlur={(e) =>
-                            searchFieldChanged("name", e.target.value)
-                          }
-                          onKeyPress={(e) => onKeyPress("name", e)}
-                        />
+                        <div className="relative">
+                          <TextInput
+                            className="w-full pr-10"
+                            value={searchValue}
+                            placeholder="Name"
+                            onChange={(e) => setSearchValue(e.target.value)}
+                            onBlur={(e) => searchFieldChanged("name", e.target.value)}
+                            onKeyPress={(e) => onKeyPress("name", e)}
+                          />
+                          {searchValue && (
+                            <button
+                              onClick={() => clearSearch("name")}
+                              className="absolute inset-y-0 right-0 px-3 py-2 text-gray-400 transition-colors duration-200 transform bg-gray-500 rounded-r-md hover:bg-gray-600 focus:outline-none focus:bg-gray-600"
+                            >
+                              ×
+                            </button>
+                          )}
+                        </div>
                       </th>
                       <th className="px-3 py-3"></th>                     
                       <th className="px-3 py-3"></th>                     

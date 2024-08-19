@@ -15,7 +15,7 @@ class CategoryService
      * @param string $sortDirection
      * @return \Illuminate\Contracts\Pagination\LengthAwarePaginator
      */
-    public function getFilteredCategories(array $filters, string $sortField = 'created_at', string $sortDirection = 'desc')
+    public function getFilteredCategories(array $filters, string $sortField = 'name', string $sortDirection = 'asc')
     {
         return Category::query()
             ->when($filters['name'] ?? null, function ($query, $name) {

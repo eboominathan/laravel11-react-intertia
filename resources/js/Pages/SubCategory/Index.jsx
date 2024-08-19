@@ -144,12 +144,15 @@ export default function Index({ auth, subcategories, queryParams = null, success
                                                     <th className="px-3 py-2 text-gray-100 text-nowrap hover:underline">
                                                         <div className="flex">
                                                             <div className="image">
-                                                                <a href={`#lightbox` + subcategory.id}>
+                                                                {subcategory.image_path && (
+                                                                    <a href={`#lightbox` + subcategory.id}>
                                                                     <img
                                                                         src={subcategory.image_path}
                                                                         className="w-10 h-10 rounded-full"
                                                                     />
                                                                 </a>
+                                                                ) }
+                                                                
                                                                 <div
                                                                     id={`lightbox` + subcategory.id}
                                                                     className="fixed inset-0 hidden p-10 overflow-auto target:block bg-black/75"

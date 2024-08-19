@@ -72,7 +72,7 @@ class CustomerService
      * @param string $sortDirection
      * @return \Illuminate\Contracts\Pagination\LengthAwarePaginator
      */
-    public function getFilteredCustomers(array $filters, string $sortField = 'created_at', string $sortDirection = 'desc')
+    public function getFilteredCustomers(array $filters, string $sortField = 'name', string $sortDirection = 'asc')
     {
         $query = Customer::query();
 

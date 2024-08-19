@@ -29,7 +29,7 @@ class CustomerResource extends JsonResource
             'created_at' => (new Carbon($this->created_at))->format('d-m-Y'),            
             'status' => $this->status,
             'image_path' => $this->image_path && !(str_starts_with($this->image_path, 'http')) ?
-                Storage::url($this->image_path) : $this->image_path,
+                Storage::url($this->image_path) : 'profile.png',
             'createdBy' => new UserResource($this->createdBy),
             'updatedBy' => new UserResource($this->updatedBy),
         ];

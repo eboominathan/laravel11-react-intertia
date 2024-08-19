@@ -8,7 +8,7 @@ use Illuminate\Support\Str;
 
 class SubCategoryService
 {
-    public function getFilteredSubcategories($filters, $sortField, $sortDirection)
+    public function getFilteredSubcategories(array $filters, string $sortField = 'name', string $sortDirection = 'asc')
     {
         return SubCategory::query()
             ->when($filters['name'] ?? null, function ($query, $name) {

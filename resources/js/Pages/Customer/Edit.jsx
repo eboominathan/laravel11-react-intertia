@@ -7,9 +7,11 @@ import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout";
 import { Head, Link, useForm } from "@inertiajs/react";
 
 export default function Edit({ auth, customer }) {
+  // Define the path to the default profile picture
+  const defaultProfilePic = "/profile.png";
 
   const { data, setData, post, errors, reset } = useForm({
-    image: "",
+    image: customer.data.image_path ? `/${customer.data.image_path}` : defaultProfilePic,
     name: customer.data.name || "",
     mobile_number: customer.data.mobile_number || "",
     email: customer.data.email || "",
@@ -32,7 +34,7 @@ export default function Edit({ auth, customer }) {
       header={
         <div className="flex items-center justify-between">
           <h2 className="text-xl font-semibold leading-tight text-gray-800 dark:text-gray-200">
-            Edit Customer "{customer.name}"
+            Edit Customer "{data.name}"
           </h2>
         </div>
       }
@@ -45,13 +47,13 @@ export default function Edit({ auth, customer }) {
               onSubmit={onSubmit}
               className="p-4 bg-white shadow sm:p-8 dark:bg-gray-800 sm:rounded-lg"
             >
-              {/* Display customer image if available */}
-              {customer.image_path && (
+              {/* Display customer image */}
+              {data.image && (
                 <div className="mb-4">
                   <img
-                    src={customer.image_path}
-                    className="w-64"
-                    alt="Customer"
+                    src={data.image}
+                    className="w-32 rounded-full" 
+                    alt={data.name}
                   />
                 </div>
               )}
@@ -164,7 +166,7 @@ export default function Edit({ auth, customer }) {
               <div className="mt-4">
                 <InputLabel htmlFor="status" value="Status" />
                 <SelectInput
-                  value={data.status}  
+                  value={data.status}
                   name="status"
                   id="status"
                   className="block w-full mt-1"

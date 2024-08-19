@@ -66,7 +66,7 @@ class CustomerRequest extends FormRequest
                     }
                 },
             ],
-            'email' => 'required|email|max:255',
+            'email' => 'nullable|email|max:255',
             'street' => 'nullable|string|max:255',
             'area' => 'nullable|string|max:255',
             'city' => 'nullable|string|max:255',
@@ -106,7 +106,7 @@ class CustomerRequest extends FormRequest
                     }
                 },
             ],
-            'email' => 'sometimes|required|email|max:255',
+            'email' => 'nullable|email|max:255',
             'street' => 'nullable|string|max:255',
             'area' => 'nullable|string|max:255',
             'city' => 'nullable|string|max:255',
