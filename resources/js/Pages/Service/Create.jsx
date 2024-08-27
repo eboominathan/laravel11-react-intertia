@@ -6,11 +6,11 @@ import TextAreaInput from "@/Components/TextAreaInput";
 import TextInput from "@/Components/TextInput";
 import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout";
 import { Head, Link, useForm } from "@inertiajs/react";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 export default function Create({ auth, categories, subcategories }) {
-  const { data, setData, post, errors, reset } = useForm({
-    date: new Date().toISOString().split("T")[0], // Set today's date
+  const { data, setData, post, errors } = useForm({
+    date: new Date().toISOString().split("T")[0],
     name: "",
     acknowledgement_no: "",
     status: "",
@@ -19,38 +19,36 @@ export default function Create({ auth, categories, subcategories }) {
     follower_name: "",
     location: "",
     comments: "",
-    customer_id: "", // Ensure this field is included
+    customer_id: "",
     category_id: "",
     subcategory_id: "",
     image: "",
   });
 
   const [filteredSubcategories, setFilteredSubcategories] = useState([]);
-  const [customerName, setCustomerName] = useState("");
   const [customerId, setCustomerId] = useState("");
 
   const onSubmit = (e) => {
     e.preventDefault();
+    // console.log("Form Data on Submit:", data);
     post(route("service.store"));
   };
 
   const handleCategoryChange = (e) => {
     const selectedCategoryId = e.target.value;
-    setData("category_id", selectedCategoryId);
-
-    // Filter subcategories based on selected category
+    setData("category_id", selectedCategoryId)
     const filtered = subcategories.filter(
-      (subcategory) => subcategory.category_id === parseInt(selectedCategoryId)
+        (subcategory) => subcategory.category_id === parseInt(selectedCategoryId)
     );
     setFilteredSubcategories(filtered);
-    // Reset subcategory selection
-    setData("subcategory_id", "");
-  };
+
+    // setData("subcategory_id", "");
+};
+;
 
   const handleCustomerSelect = (customer) => {
-    setCustomerName(customer.name); // Update the visible customer name
-    setCustomerId(customer.id);     // Update the customer ID state
-    setData("customer_id", customer.id); // Update the form data
+    setCustomerId(customer.id);
+    setData("customer_id", customer.id);
   };
 
   const renderOptions = (options) => {
@@ -135,6 +133,7 @@ export default function Create({ auth, categories, subcategories }) {
                   <SelectInput
                     name="status"
                     id="status"
+                    value={data.status} // Add value prop
                     className="block w-full mt-1"
                     onChange={(e) => setData("status", e.target.value)}
                   >
@@ -168,6 +167,7 @@ export default function Create({ auth, categories, subcategories }) {
                   <SelectInput
                     name="payment_status"
                     id="payment_status"
+                    value={data.payment_status} // Add value prop
                     className="block w-full mt-1"
                     onChange={(e) => setData("payment_status", e.target.value)}
                   >
@@ -225,16 +225,11 @@ export default function Create({ auth, categories, subcategories }) {
                 <div className="relative w-full px-2 md:w-1/2">
                   <InputLabel htmlFor="customer_name" value="Customer" />
                   <Autocomplete
-                    value={customerId} // Pass customerId as value
-                    onChange={(e) => setCustomerId(e.target.value)}
+                    value={customerId}
                     onSelect={handleCustomerSelect}
                   />
                   {/* Hidden input field for customer_id */}
-                  <input
-                    type="hidden"
-                    name="customer_id"
-                    value={customerId}
-                  />
+                  <input type="hidden" name="customer_id" value={customerId} />
                   <InputError message={errors.customer_id} className="mt-2" />
                 </div>
                 <div className="w-full px-2 md:w-1/2">
@@ -242,12 +237,15 @@ export default function Create({ auth, categories, subcategories }) {
                   <SelectInput
                     id="category_id"
                     name="category_id"
+                    value={data.category_id} // Add value prop here
                     className="block w-full mt-1"
-                    onChange={handleCategoryChange}
+                    onChange={(e) => handleCategoryChange(e)}
+                    
                   >
                     <option value="">Select Category</option>
                     {renderOptions(categories)}
                   </SelectInput>
+
                   <InputError message={errors.category_id} className="mt-2" />
                 </div>
                 <div className="w-full px-2 md:w-1/2">
@@ -255,6 +253,7 @@ export default function Create({ auth, categories, subcategories }) {
                   <SelectInput
                     id="subcategory_id"
                     name="subcategory_id"
+                    value={data.subcategory_id} // Add value prop
                     className="block w-full mt-1"
                     onChange={(e) => setData("subcategory_id", e.target.value)}
                   >

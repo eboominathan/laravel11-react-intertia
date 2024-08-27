@@ -9,8 +9,20 @@ class CategorySeeder extends Seeder
 {
     public function run()
     {
+
+        // Temporarily disable foreign key checks
+        DB::statement('SET FOREIGN_KEY_CHECKS=0;');
+        // Truncate the categories and sub_categories tables
+        DB::table('services')->truncate();
+        DB::table('sub_categories')->truncate();
+        DB::table('categories')->truncate();
+
+        // Re-enable foreign key checks
+        DB::statement('SET FOREIGN_KEY_CHECKS=1;');
+
+
         $data = [
-            'AADHAR' => [             
+            'AADHAR' => [
                 'ADDRESS CHANGE',
                 'PVC CARD',
                 'BIOMETRIC UPDATE'

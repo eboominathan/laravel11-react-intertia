@@ -22,9 +22,9 @@ return new class extends Migration
             $table->string('follower_name');
             $table->string('location')->nullable();
             $table->text('comments')->nullable();
-            $table->foreignId('customer_id')->constrained('customers')->nullable();
-            $table->foreignId('category_id')->constrained('categories')->nullable();
-            $table->foreignId('subcategory_id')->constrained('sub_categories')->nullable();
+            $table->foreignId('customer_id')->nullable()->constrained('customers');
+            $table->foreignId('category_id')->nullable()->constrained('categories');
+            $table->foreignId('subcategory_id')->nullable()->constrained('sub_categories');
             $table->foreignId('created_by')->nullable()->constrained('users');
             $table->foreignId('updated_by')->nullable()->constrained('users');
             $table->foreignId('deleted_by')->nullable()->constrained('users');

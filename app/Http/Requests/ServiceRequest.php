@@ -40,8 +40,8 @@ class ServiceRequest extends FormRequest
             'location' => 'nullable|string',
             'comments' => 'nullable|string',
             'customer_id' => 'nullable|exists:customers,id',
-            'category_id' => 'nullable|exists:categories,id',
-            'subcategory_id' => 'nullable|exists:sub_categories,id',
+            'category_id' => 'required|exists:categories,id',
+            'subcategory_id' => 'required|exists:sub_categories,id',
         ];
     }
 
@@ -58,8 +58,8 @@ class ServiceRequest extends FormRequest
             'location' => 'nullable|string',
             'comments' => 'nullable|string',
             'customer_id' => 'nullable|exists:customers,id',
-            'category_id' => 'nullable|exists:categories,id',
-            'subcategory_id' => 'nullable|exists:sub_categories,id',
+            'category_id' => 'required|exists:categories,id',
+            'subcategory_id' => 'required|exists:sub_categories,id',
         ];
     }
 
@@ -67,7 +67,9 @@ class ServiceRequest extends FormRequest
     {
         return [
             'date.required' => 'The date is required.',
-            'name.required' => 'The name is required.'
+            'name.required' => 'The name is required.',
+            'category_id.required' => 'Category is required.',
+            'subcategory_id.required' => 'SubCategory is required.',
         
         ];
     }
