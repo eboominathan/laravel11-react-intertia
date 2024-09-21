@@ -7,6 +7,7 @@ const Autocomplete = ({ value, onChange, onSelect }) => {
   const [query, setQuery] = useState(value || ""); // Initialize query with value
   const [suggestions, setSuggestions] = useState([]);
   const [isFetching, setIsFetching] = useState(false);
+  const [selectedCustomerId, setSelectedCustomerId] = useState(""); // New state to store selected customer ID
 
   useEffect(() => {
     if (query.length < 3) {
@@ -31,10 +32,15 @@ const Autocomplete = ({ value, onChange, onSelect }) => {
     fetchSuggestions();
   }, [query]);
 
+
   const handleSelect = (customer) => {
-    onSelect(customer); // Trigger the onSelect callback with the selected customer
     setQuery(customer.name); // Set the query to the selected customer's name
+    setSelectedCustomerId(customer.id); // Set the selected customer ID
     setSuggestions([]); // Clear suggestions
+
+    if (onSelect) {
+      onSelect(customer); // Optional callback to handle selection
+    }
   };
 
   const filteredSuggestions = suggestions.filter((suggestion) =>
@@ -50,11 +56,12 @@ const Autocomplete = ({ value, onChange, onSelect }) => {
         className="block w-full mt-1"
         placeholder="Type to search..."
       />
+      
       {/* Hidden input field for customer_id */}
       <input
         type="hidden"
         name="customer_id"
-        value={value}
+        value={selectedCustomerId} // Bind selected customer ID to this hidden field
       />
 
       {isFetching && <div>Loading...</div>}

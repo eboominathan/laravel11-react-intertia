@@ -29,7 +29,7 @@ export default function Edit({ auth, categories, subcategories, service }) {
 
   const [filteredSubcategories, setFilteredSubcategories] = useState([]);
   const [customerName, setCustomerName] = useState(service.data.customer ? service.data.customer.name : "");
-  const [customerId, setCustomerId] = useState(service.customer_id || "");
+  const [customerId, setCustomerId] = useState(service.data.customer_id || "");
 
   useEffect(() => {
     if (data.category_id) {
@@ -42,7 +42,7 @@ export default function Edit({ auth, categories, subcategories, service }) {
 
   const onSubmit = (e) => {
     e.preventDefault();
-
+    console.log(service);
     // Check if service.id exists
     if (!data.id) {
       console.error("Service ID is missing");
@@ -61,9 +61,10 @@ export default function Edit({ auth, categories, subcategories, service }) {
   const handleCustomerSelect = (customer) => {
     setCustomerName(customer.name);
     setCustomerId(customer.id);
-    setData("customer_id", customer.id);
+    setData("customer_id", customer.id); // Ensure customer_id is set in the form data
   };
 
+  
   const renderOptions = (options) => {
     return options.map((option) => (
       <option key={option.id} value={option.id}>
@@ -239,8 +240,7 @@ export default function Edit({ auth, categories, subcategories, service }) {
                   <InputLabel htmlFor="customer_name" value="Customer" />
                   <Autocomplete
                     value={customerName} // Pass customerName as the value
-                    onChange={handleCustomerSelect} // Use handleCustomerSelect to update customer selection
-                    options={/* your customer data */[]}
+                    onSelect={handleCustomerSelect} // Handle customer selection
                   />
                   <InputError message={errors.customer_id} className="mt-2" />
                 </div>
