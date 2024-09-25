@@ -75,7 +75,7 @@ class ServiceService
         if ($image = $data['image'] ?? null) {
             $data['image_path'] = $image->store('service/' . Str::random(), 'public');
         }
-        $service = $this->getServiceById($id);
+        $service = $this->getServiceById($id);   
         $service->update($data);
 
         return $service;

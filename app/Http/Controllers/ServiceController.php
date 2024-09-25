@@ -5,8 +5,10 @@ namespace App\Http\Controllers;
 use App\Http\Requests\ServiceRequest;
 use App\Http\Resources\ServiceResource;
 use App\Models\Category;
+use App\Models\Service;
 use App\Models\SubCategory;
 use App\Services\ServiceService;
+use Illuminate\Http\Request;
 
 class ServiceController extends Controller
 {
@@ -135,4 +137,21 @@ class ServiceController extends Controller
         return redirect()->route('service.index')
             ->with('success', 'Service was deleted');
     }
+    public function updateStatus(Request $request, Service $service)
+    {
+        // Validate the service_status to ensure it's valid
+        $validated = $request->validate([
+            'service_status' => ['required', 'in:pending,in_progress,completed,cancelled,not_applied_yet'],
+        ]);
+        
+ 
+        // Update the service status
+        $service->update([
+            'service_status' => $validated['service_status'],
+        ]);
+    
+        // Return a response that Inertia can handle
+        return redirect()->back()->with('success', 'Service status updated successfully.');
+    }
+    
 }

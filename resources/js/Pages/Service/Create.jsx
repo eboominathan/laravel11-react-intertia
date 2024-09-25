@@ -36,16 +36,14 @@ export default function Create({ auth, categories, subcategories }) {
 
   const handleCategoryChange = (e) => {
     const selectedCategoryId = e.target.value;
-    setData("category_id", selectedCategoryId)
+    setData("category_id", selectedCategoryId);
     const filtered = subcategories.filter(
-        (subcategory) => subcategory.category_id === parseInt(selectedCategoryId)
+      (subcategory) => subcategory.category_id === parseInt(selectedCategoryId)
     );
     setFilteredSubcategories(filtered);
 
     // setData("subcategory_id", "");
-};
-;
-
+  };
   const handleCustomerSelect = (customer) => {
     setCustomerId(customer.id);
     setData("customer_id", customer.id);
@@ -145,14 +143,19 @@ export default function Create({ auth, categories, subcategories }) {
                 </div>
                 <div className="w-full px-2 md:w-1/2">
                   <InputLabel htmlFor="service_status" value="Service Status" />
-                  <TextInput
-                    id="service_status"
-                    type="text"
+                  <SelectInput
                     name="service_status"
+                    id="service_status"
                     value={data.service_status}
                     className="block w-full mt-1"
                     onChange={(e) => setData("service_status", e.target.value)}
-                  />
+                  >
+                    <option value="">Select Service Status</option>
+                    <option value="not_applied_yet">Not Applied Yet</option>
+                    <option value="in_progress">In Progress</option>
+                    <option value="pending">Pending</option>
+                    <option value="completed">Completed</option>
+                  </SelectInput>
                   <InputError
                     message={errors.service_status}
                     className="mt-2"
@@ -240,7 +243,6 @@ export default function Create({ auth, categories, subcategories }) {
                     value={data.category_id} // Add value prop here
                     className="block w-full mt-1"
                     onChange={(e) => handleCategoryChange(e)}
-                    
                   >
                     <option value="">Select Category</option>
                     {renderOptions(categories)}

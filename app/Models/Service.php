@@ -19,6 +19,7 @@ class Service extends Model implements Auditable
         'customer_id',
         'subcategory_id',
         'service_type',
+        'service_status',
         'acknowledgement_no',
         'status',
         'payment_status',

@@ -29,6 +29,10 @@ Route::middleware(['auth'])->group(function () {
     Route::resource('category', CategoryController::class);
     Route::resource('subcategory', SubCategoryController::class);
     Route::resource('service', ServiceController::class);
+    Route::put('/service/update-status/{service}', [ServiceController::class, 'updateStatus'])->name('service.update_status');
+
+
+
     Route::get('/api/customers/search', function (Request $request) {
         $query = $request->input('query');
     

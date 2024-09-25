@@ -58,8 +58,8 @@ class ServiceRequest extends FormRequest
             'location' => 'nullable|string',
             'comments' => 'nullable|string',
             'customer_id' => 'nullable|exists:customers,id',
-            'category_id' => 'required|exists:categories,id',
-            'subcategory_id' => 'required|exists:sub_categories,id',
+            'category_id' => 'sometimes|exists:categories,id',
+            'subcategory_id' => 'sometimes|exists:sub_categories,id',
         ];
     }
 

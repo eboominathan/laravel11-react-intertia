@@ -9,9 +9,8 @@ import { Head, Link, useForm } from "@inertiajs/react";
 import { useState, useEffect } from "react";
 
 export default function Edit({ auth, categories, subcategories, service }) {
-  
   const { data, setData, put, errors, reset } = useForm({
-    id:service.data.id,
+    id: service.data.id,
     date: service.date || new Date().toISOString().split("T")[0],
     name: service.data.name || "",
     acknowledgement_no: service.data.acknowledgement_no || "",
@@ -28,7 +27,9 @@ export default function Edit({ auth, categories, subcategories, service }) {
   });
 
   const [filteredSubcategories, setFilteredSubcategories] = useState([]);
-  const [customerName, setCustomerName] = useState(service.data.customer ? service.data.customer.name : "");
+  const [customerName, setCustomerName] = useState(
+    service.data.customer ? service.data.customer.name : ""
+  );
   const [customerId, setCustomerId] = useState(service.data.customer_id || "");
 
   useEffect(() => {
@@ -42,14 +43,21 @@ export default function Edit({ auth, categories, subcategories, service }) {
 
   const onSubmit = (e) => {
     e.preventDefault();
-    console.log(service);
+
     // Check if service.id exists
     if (!data.id) {
       console.error("Service ID is missing");
       return;
     }
 
-    put(route("service.update", { service: data.id }));
+    put(route("service.update", { service: data.id }), {
+      onSuccess: () => {
+        reset(); // Optionally reset the form after success
+      },
+      onError: (errors) => {
+        console.error(errors); // Handle errors if needed
+      },
+    });
   };
 
   const handleCategoryChange = (e) => {
@@ -64,7 +72,6 @@ export default function Edit({ auth, categories, subcategories, service }) {
     setData("customer_id", customer.id); // Ensure customer_id is set in the form data
   };
 
-  
   const renderOptions = (options) => {
     return options.map((option) => (
       <option key={option.id} value={option.id}>
@@ -92,7 +99,7 @@ export default function Edit({ auth, categories, subcategories, service }) {
               onSubmit={onSubmit}
               className="p-4 bg-white shadow sm:p-8 dark:bg-gray-800 sm:rounded-lg"
             >
-              {/* Two text inputs in a row */}
+              {/* Date and Name Inputs */}
               <div className="flex flex-wrap mt-4 -mx-2">
                 <div className="w-full px-2 md:w-1/2">
                   <InputLabel htmlFor="date" value="Date" />
@@ -140,7 +147,7 @@ export default function Edit({ auth, categories, subcategories, service }) {
                 </div>
               </div>
 
-              {/* Select Inputs */}
+              {/* Status and Service Status Inputs */}
               <div className="flex flex-wrap mt-4 -mx-2">
                 <div className="w-full px-2 md:w-1/2">
                   <InputLabel htmlFor="status" value="Status" />
@@ -159,14 +166,19 @@ export default function Edit({ auth, categories, subcategories, service }) {
                 </div>
                 <div className="w-full px-2 md:w-1/2">
                   <InputLabel htmlFor="service_status" value="Service Status" />
-                  <TextInput
-                    id="service_status"
-                    type="text"
+                  <SelectInput
                     name="service_status"
-                    value={data.service_status}
+                    id="service_status"
                     className="block w-full mt-1"
                     onChange={(e) => setData("service_status", e.target.value)}
-                  />
+                    value={data.service_status}
+                  >
+                    <option value="">Select Service Status</option>
+                    <option value="not_applied_yet">Not Applied Yet</option>
+                    <option value="in_progress">In Progress</option>
+                    <option value="pending">Pending</option>
+                    <option value="completed">Completed</option>
+                  </SelectInput>
                   <InputError
                     message={errors.service_status}
                     className="mt-2"
@@ -174,7 +186,7 @@ export default function Edit({ auth, categories, subcategories, service }) {
                 </div>
               </div>
 
-              {/* Continue with other fields */}
+              {/* Payment Status and Follower Name Inputs */}
               <div className="flex flex-wrap mt-4 -mx-2">
                 <div className="w-full px-2 md:w-1/2">
                   <InputLabel htmlFor="payment_status" value="Payment Status" />
@@ -208,6 +220,7 @@ export default function Edit({ auth, categories, subcategories, service }) {
                 </div>
               </div>
 
+              {/* Location and Comments Inputs */}
               <div className="flex flex-wrap mt-4 -mx-2">
                 <div className="w-full px-2 md:w-1/2">
                   <InputLabel htmlFor="location" value="Location" />
@@ -239,8 +252,8 @@ export default function Edit({ auth, categories, subcategories, service }) {
                 <div className="relative w-full px-2 md:w-1/2">
                   <InputLabel htmlFor="customer_name" value="Customer" />
                   <Autocomplete
-                    value={customerName} // Pass customerName as the value
-                    onSelect={handleCustomerSelect} // Handle customer selection
+                    value={customerName}
+                    onSelect={handleCustomerSelect}
                   />
                   <InputError message={errors.customer_id} className="mt-2" />
                 </div>
@@ -263,10 +276,7 @@ export default function Edit({ auth, categories, subcategories, service }) {
                   <InputError message={errors.category_id} className="mt-2" />
                 </div>
                 <div className="w-full px-2 md:w-1/2">
-                  <InputLabel
-                    htmlFor="subcategory_id"
-                    value="Subcategory"
-                  />
+                  <InputLabel htmlFor="subcategory_id" value="Subcategory" />
                   <SelectInput
                     name="subcategory_id"
                     id="subcategory_id"
@@ -278,10 +288,14 @@ export default function Edit({ auth, categories, subcategories, service }) {
                     <option value="">Select Subcategory</option>
                     {renderOptions(filteredSubcategories)}
                   </SelectInput>
-                  <InputError message={errors.subcategory_id} className="mt-2" />
+                  <InputError
+                    message={errors.subcategory_id}
+                    className="mt-2"
+                  />
                 </div>
               </div>
 
+              {/* Submit Button */}
               <div className="flex items-center justify-end mt-4">
                 <Link
                   href={route("service.index")}
@@ -289,7 +303,6 @@ export default function Edit({ auth, categories, subcategories, service }) {
                 >
                   Cancel
                 </Link>
-
                 <button
                   type="submit"
                   className="inline-flex items-center px-4 py-2 ml-4 text-xs font-semibold tracking-widest text-white uppercase transition duration-150 ease-in-out bg-gray-800 border border-transparent rounded-md dark:bg-gray-200 dark:text-gray-800 hover:bg-gray-700 dark:hover:bg-white focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-500"
